@@ -1,48 +1,44 @@
 #include "sort.h"
-#include <stdio.h>
 /**
- * _bigest -  Give me the largest number in a array of integers
- * @array: The Int array
- * @size: Size of array
- * Return: The largest number
- */
-int _bigest(int *array, size_t size)
-{
-	size_t i;
-	int k = 0;
-
-	for (i = 0; i < size; i++)
-	{
-		if (k < array[i])
-			k = array[i];
-	}
-
-	return (k);
-}
-/**
- * _memset -  Create a integer array and set each space in 0
- * @size: Size of array
- * Return: The integer array
- */
-int *_memset(int size)
-{
-	int *ptr = NULL;
-	int i;
-
-	ptr = malloc((size) * sizeof(int));
-
-	for (i = 0; i < size; i++)
-		ptr[i] = 0;
-
-	return (ptr);
-}
-/**
- * counting_sort - sort an array with the counting sort algorithm
- * @array: The Int array
- * @size: Size of array
- * Return: The sorted list
- */
+ * counting_sort - sorts an array of integers in ascending
+ * order using the Counting sort algorithm
+ * @array: pointer to array
+ * @size: size of the array
+ **/
 void counting_sort(int *array, size_t size)
 {
-	size_t i, j;
+	int n, j, *count_array, *aux;
+	size_t i;
+
+	if (!array || size < 2)
+		return;
+	n = array[0];
+	for (i = 0; i < size; i++)
+	{
+		if (array[i] > n)
+			n = array[i];
+	}
+	count_array = calloc((n + 1), sizeof(int));
+	for (i = 0; i < size; i++)
+	{
+		count_array[array[i]]++;
+	}
+	for (j = 1; j < n; j++)
+	{
+		count_array[j + 1] += count_array[j];
+	}
+	print_array(count_array, n + 1);
+	aux = malloc(sizeof(int) * size);
+	for (i = 0; i < size; i++)
+	{
+		count_array[array[i]]--;
+		aux[count_array[array[i]]] = array[i];
+	}
+	for (i = 0; i < size; i++)
+	{
+		array[i] = aux[i];
+	}
+	free(aux);
+	free(count_array);
+}
 
