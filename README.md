@@ -21,6 +21,7 @@ For example: The below list of characters is sorted in increasing order of their
 2-O The big O notations of the time complexity of the Selection sort algorithm
 3-O The big O notations of the time complexity of the Quick sort algorithm
 
-Authors
-Toni
+Authors  
+
+Toni  
 Mesoma 
