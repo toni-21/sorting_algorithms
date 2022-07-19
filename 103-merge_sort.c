@@ -1,52 +1,69 @@
-#include <stdio.h>
-#include <stdlib.h>
 #include "sort.h"
-
 /**
- * copy - copies data from one buffer to another
- *
- * @src: source buffer
- * @dst: destination buffer
- * @size: size of buffers
- *
- * Return: No Return
- */
-void copy(int *src, int *dst, int size)
+ * merge - merges l and r arrays into original array
+ * @array: pointer to array
+ * @size: size of the array
+ * @l: pointer to left array
+ * @r: pointer to right array
+ **/
+void merge(int *array, int *l, int *r, size_t size)
 {
-	int i;
+	int i = 0, j = 0, k = 0;
+	int size_l, size_r;
 
-	for (i = 0; i < size; i++)
-		dst[i] = src[i];
-}
-/**
- * merge - merges two sets of data in ascending order
- * but they must already be sorted before hand
- * @array: first set of data
- * @buff: second set of data
- * @minL: lower range of first set of data
- * @maxL: upper range of first set of data
- * @minR: lower range of second set of data
- * @maxR: upper range of second set of data
- *
- * Return: No Return
- */
-void merge(int *array, int *buff, int minL, int maxL, int minR, int maxR)
-{
-	int i = minL, j = minR, k = minL;
+	size_l = size / 2;
+	size_r = size - size_l;
+	printf("Merging...\n");
+	printf("[left]: ");
+	print_array(l, size_l);
+	printf("[right]: ");
+	print_array(r, size_r);
 
-	while (i <= maxL || j <= maxR)
-
-		if (i <= maxL && j <= maxR)
-			if (buff[i] <= buff[j])
-				array[k] = buff[i], k++, i++;
-			else
-				array[k] = buff[j], k++, j++;
-
-		else if (i > maxL && j <= maxR)
-			array[k] = buff[j], k++, j++;
+	while (i < size_l && j < size_r)
+	{
+		if (l[i] < r[j])
+			array[k++] = l[i++];
 		else
-			array[k] = buff[i], k++, i++;
+			array[k++] = r[j++];
+	}
+
+	while (i < size_l)
+		array[k++] = l[i++];
+
+	while (j < size_r)
+		array[k++] = r[j++];
+	printf("[Done]: ");
+	print_array(array, size);
 }
 /**
- * printcheck - prints an array in a given range
+ * merge_sort - sorts an array of integers in ascending order using
+ * the Merge sort algorithm
+ * @array: pointer to array
+ * @size: size of the array
+ **/
+void merge_sort(int *array, size_t size)
+{
+	size_t mid = 0, i;
+	int left[1000];
+	int right[1000];
 
+	if (!array)
+		return;
+
+	if (size < 2)
+		return;
+
+	mid = size / 2;
+	/*left = (int*)malloc(sizeof(int) * mid);*/
+	/*right = (int*)malloc(sizeof(int) * (size - mid));*/
+
+	for (i = 0; i < mid; i++)
+		left[i] = array[i];
+
+	for (i = mid; i < size; i++)
+		right[i - mid] = array[i];
+
+	merge_sort(left, mid);
+	merge_sort(right, size - mid);
+	merge(array, left, right, size);
+}
